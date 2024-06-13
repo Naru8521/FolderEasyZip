@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import AdmZip from "adm-zip";
 import * as fs from "fs";
+import * as Tar from "tar";
+import * as zlib from "zlib";
 
 /**
  * sourceフォルダー内に含まれるzipのパスを取得します
@@ -82,12 +84,48 @@ export async function zip(sourcePath, targetPath) {
 
     for (const zipPath of zipPaths) {
         try {
-            const outputPath = zipPath.replace(sourcePath, targetPath);
+            const outputPath = zipPath.replace(sourcePath, targetPath).replace(/\/.zip$/, "");
             const zip = new AdmZip(zipPath);
             zip.extractAllTo(outputPath, true);
+            console.info(chalk.green(zipPath + " の解凍に成功しました"));
         } catch (e) {
-            console.error(chalk.red(zipPath + " の圧縮に失敗しました", e));
+            console.error(chalk.red(zipPath + " の解凍に失敗しました", e));
         }
+    }
+
+    console.info(chalk.bgGreen("処理が完了しました"));
+}
+
+/**
+ * tarファイルを解凍する
+ * @param {string} sourcePath 
+ * @param {string} targetPath 
+ */
+export async function tar(sourcePath, targetPath) {
+    const tarPaths = getSourceTarPath(sourcePath);
+
+    if (!tarPaths) return;
+
+    for (const tarPath of tarPaths) {
+        const outputPath = tarPath.replace(sourcePath, targetPath).replace(/\.tar$/, "");
+        fs.mkdirSync(outputPath, { recursive: true });
+
+        await new Promise((resolve, reject) => {
+            const gunZip = zlib.createGunzip();
+            const extractor = Tar.extract({ cwd: outputPath });
+
+            fs.createReadStream(tarPath)
+                .pipe(gunZip)
+                .pipe(extractor)
+                .on("error", (e) => {
+                    console.error(chalk.red(tarPath + " の解凍に失敗しました", e));
+                    reject(e);
+                })
+                .on("end", () => {
+                    console.info(chalk.green(tarPath + " の解凍に成功しました"));
+                    resolve();
+                });
+        });
     }
 
     console.info(chalk.bgGreen("処理が完了しました"));

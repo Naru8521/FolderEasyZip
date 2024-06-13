@@ -65,6 +65,8 @@ export async function zip(sourcePath, targetPath) {
 export async function tar(sourcePath, targetPath) {
     const directoryPaths = getSourceDirPath(sourcePath);
 
+    if (!directoryPaths) return;
+
     for (const directoryPath of directoryPaths) {
         try {
             const outputPath = directoryPath.replace(sourcePath, targetPath) + ".tar";

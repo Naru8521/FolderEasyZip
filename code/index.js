@@ -19,6 +19,7 @@ rl.on("line", (input) => {
             case "zip": return ziptar.zip(sourcePath, targetPath);
             case "tar": return ziptar.tar(sourcePath, targetPath);
             case "unzip": return unziptar.zip(sourcePath, targetPath);
+            case "untar": return unziptar.tar(sourcePath, targetPath);
             default: return console.error(chalk.red("形式を指定する必要があります。start <zip,tar,unzip>"))
         }
     }
