@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FolderEasyZip</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="drop-field" class="drop-field">
+            変換するフォルダーをドロップしてください
+        </div>
+        <div class="file-list" id="file-list">
+            <ul id="list"></ul>
+        </div>
+        <div class="conversion-method">
+            <h3>変換方式</h3>
+            <div class="dropdown">
+                <select id="operation-select">
+                    <option value="zip">Zip</option>
+                    <option value="tar">Tar</option>
+                    <option value="unzip">Unzip</option>
+                    <option value="untar">Untar</option>
+                </select>
+            </div>
+        </div>
+        <button class="select-folder-button" id="select-folder-button">出力フォルダを設定</button>
+        <button class="execute-button" id="execute-button">変換</button>
+
+        <div class="log-container" id="log-container">
+            <div id="log-messages"></div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
