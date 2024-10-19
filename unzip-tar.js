@@ -61,6 +61,7 @@ async function zip(mainWindow, directoryPaths, outputPath) {
             const baseDirName = path.basename(zipPath, ".zip");
             const extractPath = path.join(outputPath, baseDirName);
             const zip = new AdmZip(zipPath);
+
             zip.extractAllTo(extractPath, true);
             mainWindow.webContents.send("send-log", `${zipPath} の解凍に成功しました`);
         } catch (e) {
